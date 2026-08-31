@@ -81,12 +81,23 @@ evidence/2026-08-25/
     raw_iterations.csv
 ```
 
+회차별 열람용 파생본은 다음 위치에 둔다.
+
+```text
+derived/2026-08-25/
+  README.md
+  ITERATION_MANIFEST.csv
+  ADD/iteration_001.txt ... iteration_100.txt
+  MUL/iteration_001.txt ... iteration_100.txt
+```
+
 파일 역할:
 
 1. `summary.csv`: step별 통계와 판정을 빠르게 확인한다.
 2. `terminal_output.txt`: 1~100회 전체 터미널 출력과 최종 집계를 확인한다.
 3. `raw_iterations.csv`: 100개 원시값으로 통계를 독립 재계산한다.
 4. `FILE_MANIFEST.csv`·`SHA256SUMS.txt`: 공개 파일의 크기와 SHA-256을 확인한다.
+5. `derived/`: 전체 터미널 로그에서 바이트 단위로 추출한 회차별 열람용 파생본이다.
 
 ## Verification
 
@@ -101,6 +112,7 @@ Python 3 표준 라이브러리만 사용하여 해시·100회 통계·판정·�
 
 ```text
 python tools/verify_evidence.py
+python tools/split_iterations.py
 ```
 
 두 명령은 원자료를 수정하지 않는다.

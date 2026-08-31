@@ -22,11 +22,17 @@
 - `evidence/2026-08-25/SHA256SUMS.txt`: 표준 해시 점검용 목록
 - `tools/verify_hashes.ps1`: 크기·SHA-256 확인
 - `tools/verify_evidence.py`: 해시, Run ID, 행 수, 통계와 검증 플래그 확인
+- `derived/2026-08-25/ITERATION_MANIFEST.csv`: 회차별 파생 TXT의 원본 경로,
+  원본 SHA-256, byte offset, 크기와 개별 SHA-256
+- `tools/split_iterations.py`: 원본 터미널 로그에서 회차별 byte slice 생성
 
 ## Immutable Evidence Rule
 
 최초 공개 commit 이후 `terminal_output.txt`, `summary.csv`,
 `raw_iterations.csv`를 수정하거나 더 좋은 후속 수치로 교체하지 않는다.
+
+`derived/`의 회차별 TXT는 원본을 대체하지 않는 열람용 파생자료다. 각 파일은
+원본 `terminal_output.txt`의 연속 byte 구간과 정확히 일치해야 한다.
 
 오류 정정이나 추가 자료가 필요하면 다음을 따른다.
 

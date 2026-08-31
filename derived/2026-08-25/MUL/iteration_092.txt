@@ -1,0 +1,193 @@
+================================================================================
+BEGIN Multiplication depth6 - ITERATION 092/100
+================================================================================
+[1] test condition and input
+  test configuration
+  item                    value
+  ------------------------------------------------------------------------------------
+  iteration               92/100
+  plaintext seed          42
+  scheme                  C++ / Microsoft SEAL BGV
+  poly_modulus_degree     16384
+  plain_modulus           65537
+  security                128-bit (SEAL tc128)
+  batching                enabled
+
+  payload validation
+  item                calculation                                 result
+  ----------------------------------------------------------------------
+  m1 input            32 active slots x 16bit = 512bit              INFO
+  m2 input            32 active slots x 16bit = 512bit              INFO
+  total payload       512bit + 512bit = 1024bit <= 1024bit            OK
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m1                |  22000  57970  55854  26571  53098  16457    221  55114
+  m2                |  50661  20930  15513  63556  14408  38897  45498  10269
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m1                |  61286  38373  13102   1141  15340  55018  52520  60770
+  m2                |  18742  54025  22262  46323  38196  47445  47344  64093
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m1                |  33298  28935  61141   2075  53443  63718  24414  23005
+  m2                |  56184   3608   7252  34056  14701  15610  32879  16097
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m1                |  55748  65137  34742  35412  53319  50524  39682  28751
+  m2                |  60437  27815  37759  45748   6951  63392  50517   7742
+
+
+[2] input encryption, artifact reload, and roundtrip
+  c1 = Enc(m1)
+  encrypt_m1_ms      = 15.202300
+  artifact file      = ciphertext_artifacts/mul_iter092_c1.seal
+  serialization      = SEAL binary (compression=none)
+  saved bytes        = 1835121
+  loaded bytes       = 1835121
+  saved SHA-256      = badc7d01ac3023174a7d2fd0e5ae1c65f879520ccd95a02e41cc5ee5bbbd2ef2
+  loaded SHA-256     = badc7d01ac3023174a7d2fd0e5ae1c65f879520ccd95a02e41cc5ee5bbbd2ef2
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m1                |  22000  57970  55854  26571  53098  16457    221  55114
+  Dec(c1)           |  22000  57970  55854  26571  53098  16457    221  55114
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m1                |  61286  38373  13102   1141  15340  55018  52520  60770
+  Dec(c1)           |  61286  38373  13102   1141  15340  55018  52520  60770
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m1                |  33298  28935  61141   2075  53443  63718  24414  23005
+  Dec(c1)           |  33298  28935  61141   2075  53443  63718  24414  23005
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m1                |  55748  65137  34742  35412  53319  50524  39682  28751
+  Dec(c1)           |  55748  65137  34742  35412  53319  50524  39682  28751
+
+  c2 = Enc(m2)
+  encrypt_m2_ms      = 12.308200
+  artifact file      = ciphertext_artifacts/mul_iter092_c2.seal
+  serialization      = SEAL binary (compression=none)
+  saved bytes        = 1835121
+  loaded bytes       = 1835121
+  saved SHA-256      = 8dc4e0a159d373936030f69e30b5673b5f0d7b4c3f99f1ccfe95ee8c8f568bdc
+  loaded SHA-256     = 8dc4e0a159d373936030f69e30b5673b5f0d7b4c3f99f1ccfe95ee8c8f568bdc
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m2                |  50661  20930  15513  63556  14408  38897  45498  10269
+  Dec(c2)           |  50661  20930  15513  63556  14408  38897  45498  10269
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m2                |  18742  54025  22262  46323  38196  47445  47344  64093
+  Dec(c2)           |  18742  54025  22262  46323  38196  47445  47344  64093
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m2                |  56184   3608   7252  34056  14701  15610  32879  16097
+  Dec(c2)           |  56184   3608   7252  34056  14701  15610  32879  16097
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m2                |  60437  27815  37759  45748   6951  63392  50517   7742
+  Dec(c2)           |  60437  27815  37759  45748   6951  63392  50517   7742
+
+  validation summary
+  item                        expected                observed                        result
+  ------------------------------------------------------------------------------------------
+  roundtrip check executed    true                    true                                OK
+  c1 artifact reload          same bytes and SHA-256  saved and loaded match              OK
+  c1 input roundtrip          32 slots                32/32 matched                       OK
+  c2 artifact reload          same bytes and SHA-256  saved and loaded match              OK
+  c2 input roundtrip          32 slots                32/32 matched                       OK
+  depth-6 chain input         reloaded c1 and c2      reloaded c1 and c2                  OK
+  encrypt_total_ms   = 27.510500  (reference)
+
+[3] encrypted multiplication depth 6
+  step timer scope
+  item                            timer status
+  --------------------------------------------------------------------------------
+  measured operation              align + multiply + relinearize + mod-switch
+  between-step decryption         none
+  roundtrip/final validation      outside step timers
+  terminal/file output            outside step timers
+
+  step1: c1 * c2 -> step1_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128743483700      30128743486200      0.002500
+    multiply                  30128743486200      30128744650300      1.164100
+    relinearize               30128744650300      30128757976700     13.326400
+    mod_switch                30128757976700      30128761168600      3.191900
+    total                     30128743483700      30128761168600     17.684900
+
+  step2: step1_ct * c1 -> step2_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128761232400      30128764401100      3.168700
+    multiply                  30128764401100      30128765201600      0.800500
+    relinearize               30128765201600      30128775690500     10.488900
+    mod_switch                30128775690500      30128778547800      2.857300
+    total                     30128761232400      30128778547800     17.315400
+
+  step3: step2_ct * c2 -> step3_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128778617200      30128784544100      5.926900
+    multiply                  30128784544100      30128785205700      0.661600
+    relinearize               30128785205700      30128793166000      7.960300
+    mod_switch                30128793166000      30128795570200      2.404200
+    total                     30128778617200      30128795570200     16.953000
+
+  step4: step3_ct * c1 -> step4_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128795636700      30128803913300      8.276600
+    multiply                  30128803913300      30128804465400      0.552100
+    relinearize               30128804465400      30128812038000      7.572600
+    mod_switch                30128812038000      30128814446400      2.408400
+    total                     30128795636700      30128814446400     18.809700
+
+  step5: step4_ct * c2 -> step5_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128814706200      30128827492400     12.786200
+    multiply                  30128827492400      30128827941500      0.449100
+    relinearize               30128827941500      30128832750300      4.808800
+    mod_switch                30128832750300      30128834254700      1.504400
+    total                     30128814706200      30128834254700     19.548500
+
+  step6: step5_ct * c1 -> step6_ct
+    phase                      start_tick_ns         end_tick_ns    elapsed_ms
+    --------------------------------------------------------------------------
+    operand_align             30128834502500      30128848415600     13.913100
+    multiply                  30128848415600      30128848713500      0.297900
+    relinearize               30128848713500      30128851539200      2.825700
+    mod_switch                30128851539200      30128852388300      0.849100
+    total                     30128834502500      30128852388300     17.885800
+
+  eval_chain_ms      = 109.038900
+  final plaintext reference = (m1^4 * m2^3) mod 65537
+
+[4] compare plaintext reference with decrypted result
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  plain_result      |  16493  63755  48198  60416  52874  50127   9507  50197
+  Dec(step6_ct)     |  16493  63755  48198  60416  52874  50127   9507  50197
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  plain_result      |  10891  22862   3090   1230  37439  34073  18617  14669
+  Dec(step6_ct)     |  10891  22862   3090   1230  37439  34073  18617  14669
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  plain_result      |  40230  25054  22795  20687  29552  31564  24381   9933
+  Dec(step6_ct)     |  40230  25054  22795  20687  29552  31564  24381   9933
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  plain_result      |  20987  10810  64367  20651  57205   2166  22131  37988
+  Dec(step6_ct)     |  20987  10810  64367  20651  57205   2166  22131  37988
+
+  item                      expected            observed                  result
+  ------------------------------------------------------------------------------
+  final operation result    32 slots            32/32 matched                 OK
+  decrypt_ms = 0.616700  (reference)
+  detailed_values = raw_iterations.csv
+
+--------------------------------------------------------------------------------
+END Multiplication depth6 - ITERATION 092/100
+--------------------------------------------------------------------------------

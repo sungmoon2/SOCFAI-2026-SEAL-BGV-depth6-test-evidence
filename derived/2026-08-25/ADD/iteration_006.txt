@@ -1,0 +1,148 @@
+================================================================================
+BEGIN Addition depth6 - ITERATION 006/100
+================================================================================
+[1] test condition and input
+  test configuration
+  item                    value
+  ------------------------------------------------------------------------------------
+  iteration               6/100
+  plaintext seed          42
+  scheme                  C++ / Microsoft SEAL BGV
+  poly_modulus_degree     16384
+  plain_modulus           65537
+  security                128-bit (SEAL tc128)
+  batching                enabled
+
+  payload validation
+  item                calculation                                 result
+  ----------------------------------------------------------------------
+  m1 input            32 active slots x 16bit = 512bit              INFO
+  m2 input            32 active slots x 16bit = 512bit              INFO
+  total payload       512bit + 512bit = 1024bit <= 1024bit            OK
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m1                |  24800  62763  64414  28207   1314  11801  61506  49964
+  m2                |  25666  21312   9845  48730  56015  22041  37198  25707
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m1                |  16171  36131  32730  27122  58974  35041  53452   3276
+  m2                |   9401  49921  48461  28855  37433  63184  45910  44979
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m1                |   5527  34239  32866  29832  28976  20824  36415   8082
+  m2                |  23509  19398  23244  30836  49875  20572  14183  59941
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m1                |   7975  25794  53197   9622  42449  12197  37549  38193
+  m2                |   4789  36624  46089   1390  21276  15864   7046   2493
+
+
+[2] input encryption, artifact reload, and roundtrip
+  c1 = Enc(m1)
+  encrypt_m1_ms      = 11.697300
+  artifact file      = ciphertext_artifacts/add_iter006_c1.seal
+  serialization      = SEAL binary (compression=none)
+  saved bytes        = 1835121
+  loaded bytes       = 1835121
+  saved SHA-256      = a6016be90db790bc657cdfa31cb995df97d9a6e5cbb2624eced7b6aac19343b7
+  loaded SHA-256     = a6016be90db790bc657cdfa31cb995df97d9a6e5cbb2624eced7b6aac19343b7
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m1                |  24800  62763  64414  28207   1314  11801  61506  49964
+  Dec(c1)           |  24800  62763  64414  28207   1314  11801  61506  49964
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m1                |  16171  36131  32730  27122  58974  35041  53452   3276
+  Dec(c1)           |  16171  36131  32730  27122  58974  35041  53452   3276
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m1                |   5527  34239  32866  29832  28976  20824  36415   8082
+  Dec(c1)           |   5527  34239  32866  29832  28976  20824  36415   8082
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m1                |   7975  25794  53197   9622  42449  12197  37549  38193
+  Dec(c1)           |   7975  25794  53197   9622  42449  12197  37549  38193
+
+  c2 = Enc(m2)
+  encrypt_m2_ms      = 11.011200
+  artifact file      = ciphertext_artifacts/add_iter006_c2.seal
+  serialization      = SEAL binary (compression=none)
+  saved bytes        = 1835121
+  loaded bytes       = 1835121
+  saved SHA-256      = e9b757b826c2be31a03236d25823dc6af8982191c8607abb4a4bdf21403973b3
+  loaded SHA-256     = e9b757b826c2be31a03236d25823dc6af8982191c8607abb4a4bdf21403973b3
+
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  m2                |  25666  21312   9845  48730  56015  22041  37198  25707
+  Dec(c2)           |  25666  21312   9845  48730  56015  22041  37198  25707
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  m2                |   9401  49921  48461  28855  37433  63184  45910  44979
+  Dec(c2)           |   9401  49921  48461  28855  37433  63184  45910  44979
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  m2                |  23509  19398  23244  30836  49875  20572  14183  59941
+  Dec(c2)           |  23509  19398  23244  30836  49875  20572  14183  59941
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  m2                |   4789  36624  46089   1390  21276  15864   7046   2493
+  Dec(c2)           |   4789  36624  46089   1390  21276  15864   7046   2493
+
+  validation summary
+  item                        expected                observed                        result
+  ------------------------------------------------------------------------------------------
+  roundtrip check executed    true                    true                                OK
+  c1 artifact reload          same bytes and SHA-256  saved and loaded match              OK
+  c1 input roundtrip          32 slots                32/32 matched                       OK
+  c2 artifact reload          same bytes and SHA-256  saved and loaded match              OK
+  c2 input roundtrip          32 slots                32/32 matched                       OK
+  depth-6 chain input         reloaded c1 and c2      reloaded c1 and c2                  OK
+  encrypt_total_ms   = 22.708500  (reference)
+
+[3] encrypted addition depth 6
+  step timer scope
+  item                            timer status
+  --------------------------------------------------------------------------------
+  measured operation              Evaluator::add_inplace only
+  between-step decryption         none
+  roundtrip/final validation      outside step timers
+  terminal/file output            outside step timers
+
+  step   operation                              start_tick_ns         end_tick_ns    total_ms
+  -------------------------------------------------------------------------------------------
+  step1  c1 + c2 -> step1_ct                   27244381163100      27244381273500    0.110400
+  step2  step1_ct + c1 -> step2_ct             27244381273600      27244381365000    0.091400
+  step3  step2_ct + c2 -> step3_ct             27244381365000      27244381455800    0.090800
+  step4  step3_ct + c1 -> step4_ct             27244381455800      27244381547100    0.091300
+  step5  step4_ct + c2 -> step5_ct             27244381547100      27244381637800    0.090700
+  step6  step5_ct + c1 -> step6_ct             27244381637900      27244381729200    0.091300
+
+  eval_chain_ms      =   0.566100
+  final plaintext reference = (4*m1 + 3*m2) mod 65537
+
+[4] compare plaintext reference with decrypted result
+  slot[01..08]      |     01     02     03     04     05     06     07     08
+  plain_result      |  45124  52840  25043  62407  42227  47790  29933  14829
+  Dec(step6_ct)     |  45124  52840  25043  62407  42227  47790  29933  14829
+
+  slot[09..16]      |     09     10     11     12     13     14     15     16
+  plain_result      |  27350  32139  14155  63979  20510   2031  23853  16967
+  Dec(step6_ct)     |  27350  32139  14155  63979  20510   2031  23853  16967
+
+  slot[17..24]      |     17     18     19     20     21     22     23     24
+  plain_result      |  27098  64076   4585  15225   3381  13938  57135  15540
+  Dec(step6_ct)     |  27098  64076   4585  15225   3381  13938  57135  15540
+
+  slot[25..32]      |     25     26     27     28     29     30     31     32
+  plain_result      |  46267  16437  23370  42658  37013  30843  40260  29177
+  Dec(step6_ct)     |  46267  16437  23370  42658  37013  30843  40260  29177
+
+  item                      expected            observed                  result
+  ------------------------------------------------------------------------------
+  final operation result    32 slots            32/32 matched                 OK
+  decrypt_ms = 2.041500  (reference)
+  detailed_values = raw_iterations.csv
+
+--------------------------------------------------------------------------------
+END Addition depth6 - ITERATION 006/100
+--------------------------------------------------------------------------------

@@ -15,6 +15,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_ROOT = REPO_ROOT / "evidence" / "2026-08-25"
 MANIFEST_PATH = EVIDENCE_ROOT / "FILE_MANIFEST.csv"
+DERIVED_ROOT = REPO_ROOT / "derived" / "2026-08-25"
+DERIVED_MANIFEST_PATH = DERIVED_ROOT / "ITERATION_MANIFEST.csv"
 SIX_PLACES = Decimal("0.000001")
 
 EXPECTED = {
@@ -120,6 +122,78 @@ def verify_sensitive_text(files: list[Path], errors: list[str]) -> None:
         print(f"[PASS] public-safety text scan: {path.relative_to(REPO_ROOT)}")
 
 
+def verify_derived_iterations(errors: list[str]) -> None:
+    if not DERIVED_MANIFEST_PATH.is_file():
+        fail(f"derived manifest missing: {DERIVED_MANIFEST_PATH}", errors)
+        return
+
+    rows = read_csv(DERIVED_MANIFEST_PATH)
+    if len(rows) != 200:
+        fail(f"derived manifest rows={len(rows)}, expected 200", errors)
+
+    manifest_paths = set()
+    for operation in ("ADD", "MUL"):
+        operation_rows = [row for row in rows if row["Operation"] == operation]
+        iterations = [int(row["Iteration"]) for row in operation_rows]
+        if iterations != list(range(1, 101)):
+            fail(f"{operation} derived iterations are not ordered 1..100", errors)
+
+        source_relative = Path("evidence") / "2026-08-25" / operation / "terminal_output.txt"
+        source_path = REPO_ROOT / source_relative
+        source = source_path.read_bytes()
+        source_hash = sha256(source_path)
+
+        for row in operation_rows:
+            iteration = int(row["Iteration"])
+            expected_relative = (
+                Path("derived")
+                / "2026-08-25"
+                / operation
+                / f"iteration_{iteration:03d}.txt"
+            )
+            relative = Path(row["RelativePath"])
+            manifest_paths.add(relative.as_posix())
+            if relative.as_posix() != expected_relative.as_posix():
+                fail(f"derived path mismatch: {relative} != {expected_relative}", errors)
+                continue
+
+            path = REPO_ROOT / relative
+            if not path.is_file():
+                fail(f"missing derived file: {relative}", errors)
+                continue
+
+            data = path.read_bytes()
+            start = int(row["SourceByteStart"])
+            end = int(row["SourceByteEndExclusive"])
+            if row["SourcePath"] != source_relative.as_posix():
+                fail(f"{relative}: source path mismatch", errors)
+            if row["SourceSHA256"].upper() != source_hash:
+                fail(f"{relative}: source SHA-256 mismatch", errors)
+            if len(data) != int(row["Bytes"]):
+                fail(f"{relative}: byte size mismatch", errors)
+            if hashlib.sha256(data).hexdigest().upper() != row["SHA256"].upper():
+                fail(f"{relative}: SHA-256 mismatch", errors)
+            if source[start:end] != data:
+                fail(f"{relative}: not an exact source byte slice", errors)
+
+        actual_paths = {
+            path.relative_to(REPO_ROOT).as_posix()
+            for path in (DERIVED_ROOT / operation).glob("iteration_*.txt")
+        }
+        expected_paths = {
+            f"derived/2026-08-25/{operation}/iteration_{number:03d}.txt"
+            for number in range(1, 101)
+        }
+        if actual_paths != expected_paths:
+            fail(f"{operation}: derived file set mismatch", errors)
+        elif not any(f"{operation} derived" in error for error in errors):
+            print(f"[PASS] {operation}: 100 exact per-iteration terminal log slices")
+
+    row_paths = {Path(row["RelativePath"]).as_posix() for row in rows}
+    if row_paths != manifest_paths or len(row_paths) != 200:
+        fail("derived manifest contains duplicate or inconsistent paths", errors)
+
+
 def quantize(value: Decimal) -> Decimal:
     return value.quantize(SIX_PLACES, rounding=ROUND_HALF_UP)
 
@@ -221,6 +295,7 @@ def main() -> int:
     errors: list[str] = []
     evidence_files = verify_manifest(errors)
     verify_sensitive_text(evidence_files, errors)
+    verify_derived_iterations(errors)
     for operation in ("ADD", "MUL"):
         verify_operation(operation, errors)
 
@@ -228,7 +303,10 @@ def main() -> int:
         print(f"Verification failed with {len(errors)} issue(s).")
         return 1
 
-    print("All immutable evidence, statistics, judgement, validation, and safety checks passed.")
+    print(
+        "All immutable evidence, derived iteration views, statistics, judgement, "
+        "validation, and safety checks passed."
+    )
     return 0
 
 
