@@ -1,0 +1,35 @@
+# Credentials and local configuration
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.p12
+*.crt
+*.cer
+private/
+secrets/
+
+# Non-public test and document artifacts
+*.seal
+*.exe
+*.dll
+*.pdb
+*.zip
+*.7z
+*.hwp
+*.hwpx
+*.pdf
+*.ppt
+*.pptx
+*.bat
+*.cmd
+*.ps1
+!tools/verify_hashes.ps1
+
+# Local scratch
+tmp/
+temp/
+*.tmp
+*.bak
+
