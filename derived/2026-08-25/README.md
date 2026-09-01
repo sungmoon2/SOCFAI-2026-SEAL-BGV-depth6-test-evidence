@@ -12,8 +12,12 @@ Each TXT file contains one complete `BEGIN ... ITERATION n/100` through
 These files are navigation aids, not independent executions or additional
 measurements. The immutable evidence remains under `evidence/2026-08-25/`.
 
-Regenerate and verify the views with:
+Regenerate the views from the repository root with:
 
 ```text
 python tools/split_iterations.py
 ```
+
+This command rewrites only the files under `derived/2026-08-25/`. It does not
+modify the immutable source files under `evidence/2026-08-25/`. After
+regeneration, run `python tools/verify_evidence.py` from the repository root.

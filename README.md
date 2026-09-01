@@ -112,10 +112,22 @@ Python 3 표준 라이브러리만 사용하여 해시·100회 통계·판정·�
 
 ```text
 python tools/verify_evidence.py
+```
+
+위 두 검증 명령은 파일을 수정하지 않는다.
+
+## Derived-file Regeneration
+
+회차별 열람용 TXT와 `ITERATION_MANIFEST.csv`를 전체 터미널 로그에서 다시
+생성할 때에만 저장소 루트에서 다음 명령을 실행한다.
+
+```text
 python tools/split_iterations.py
 ```
 
-두 명령은 원자료를 수정하지 않는다.
+이 명령은 `derived/2026-08-25/`의 파생 파일만 다시 생성하며
+`evidence/2026-08-25/`의 원자료는 수정하지 않는다. 재생성 후에는
+`python tools/verify_evidence.py`로 원자료와 파생 파일의 일치를 확인한다.
 
 ## Repository Guide
 
@@ -128,8 +140,9 @@ python tools/split_iterations.py
 ## Verification and Reproduction Boundary
 
 이 저장소로 공개 파일 해시, 100회 통계, 평균 판정과 기록된 검증 플래그를
-확인할 수 있다. 실행파일·소스코드·`.seal` artifact는 포함하지 않으므로 시험을
-독립적으로 재실행하거나 암호문을 다시 로드하는 실행 재현 패키지는 아니다.
+확인할 수 있다. 시험 구현 실행파일·시험 구현 소스코드·`.seal` artifact는
+포함하지 않으므로 시험을 독립적으로 재실행하거나 암호문을 다시 로드하는
+실행 재현 패키지는 아니다.
 
 공개 입력은 `seed 42 + iteration index`로 생성한 시험 데이터이다. 실제 협력기관
 물류 payload를 포함한다고 주장하지 않는다.

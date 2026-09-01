@@ -27,12 +27,14 @@
 ## Excluded Files
 
 - `.seal` ciphertext artifacts
-- executable, source, build products and runtime scripts
+- test implementation executable, source, build products and runtime scripts
 - credentials, certificates, keys, wallets and tokens
 - private endpoints and deployment configuration
 - HWP/HWPX/PDF/PPTX reports and administrative documents
 - actual partner payloads and partner-specific mapping rules
 - internal handoff prompts and private file-system provenance records
+
+Public evidence verification and derived-file generation tools are included under `tools/`.
 
 ## Relationship to Official Documents
 
