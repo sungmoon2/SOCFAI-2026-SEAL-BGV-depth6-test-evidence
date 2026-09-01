@@ -1,5 +1,6 @@
 # Preserve frozen evidence byte-for-byte. Line-ending normalization changes hashes.
 /evidence/2026-08-25/ADD/* -text
 /evidence/2026-08-25/MUL/* -text
-/derived/2026-08-25/ADD/*.txt -text
-/derived/2026-08-25/MUL/*.txt -text
+/evidence/2026-08-25/ADD/iteration_views/*.txt -text
+/evidence/2026-08-25/MUL/iteration_views/*.txt -text
+/evidence/2026-08-25/ITERATION_MANIFEST.csv text eol=lf

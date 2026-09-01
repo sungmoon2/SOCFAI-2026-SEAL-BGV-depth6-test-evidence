@@ -38,7 +38,7 @@ def extract_operation(operation: str, label: str) -> list[dict[str, object]]:
             f"{operation}: expected iterations 1..100, observed {iterations}"
         )
 
-    output_dir = ROOT / "derived" / DATE / operation
+    output_dir = ROOT / "evidence" / DATE / operation / "iteration_views"
     output_dir.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
     expected_names = set()
@@ -67,7 +67,9 @@ def extract_operation(operation: str, label: str) -> list[dict[str, object]]:
         path.name for path in output_dir.glob("iteration_*.txt")
     } - expected_names
     if extras:
-        raise RuntimeError(f"{operation}: unexpected derived files: {sorted(extras)}")
+        raise RuntimeError(
+            f"{operation}: unexpected iteration view files: {sorted(extras)}"
+        )
     return records
 
 
@@ -76,9 +78,13 @@ def main() -> None:
     for operation, label in OPERATIONS.items():
         records.extend(extract_operation(operation, label))
 
-    manifest_path = ROOT / "derived" / DATE / "ITERATION_MANIFEST.csv"
+    manifest_path = ROOT / "evidence" / DATE / "ITERATION_MANIFEST.csv"
     with manifest_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(records[0].keys()))
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(records[0].keys()),
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(records)
 
